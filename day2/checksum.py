@@ -1,4 +1,3 @@
-import StringIO
 import unittest
 import sys
 
@@ -8,49 +7,42 @@ def read_file(file_name):
     return file_handle.read().strip()
 
 def getChecksum(inputString):
-# Check sum is the total of the differences between the max and min value on each
+# Checksum is the total of the differences between the max and min value on each
 # line of the file
     sum = 0
-
-    buf = StringIO.StringIO(inputString)
-    line = buf.readline()
-    while (line):
-        lineItems = line.split()
-        length = len(lineItems)
+    # Iterate over the lines in the string
+    for line in iter(inputString.splitlines()):
         maxForLine = 0
         minForLine = sys.maxint
-        for i in range (0, length):
-            value = int(lineItems[i])
+        # iterate over the values in the line
+        for value in [ int(v) for v in line.split()]:
             if (value > maxForLine):
                 maxForLine = value
             if (value < minForLine):
                 minForLine = value
         sum += maxForLine - minForLine
-        line= buf.readline()
-
     return sum
 
 
 def getChecksum2(inputString):
-#Checksum is the total of the division of the only 2 numbers per line which evenly divide
+# Checksum is the sum of the division of the only 2 numbers per line which evenly divide
     sum = 0
-    buf = StringIO.StringIO(inputString)
-    line = buf.readline()
-    while (line):
-        lineItems = line.split()
-        length = len(lineItems)
-        for i in range (0, length):
-         # For each line check every entry against every other
-         numerator = int(lineItems[i])
-         for j in (range (0, length)):
-            denominator = int(lineItems[j])
-            # Check they divide evenly (and aren't the same number)
-            if (numerator != denominator and numerator % denominator == 0):
-                sum += numerator / denominator
-                # there's only one pair that divide evenly so exit here.
-                break
-        line = buf.readline()
+    # Iterate over the lines in the string
+    for line in iter(inputString.splitlines()):
+        # Turn each line into an array of ints
+        values = [ int(v) for v in line.split()]
+        sum += checkValues(values)
     return sum
+
+def checkValues(values):
+    # Check every value against every other
+    for numerator in values:
+        for denominator in values:
+            if (numerator != denominator and numerator % denominator == 0):
+                # There is one pair of numbers per line for which this is true, return when we find it
+                return (numerator / denominator)
+
+
 
 class Test(unittest.TestCase):
     def test(self):
