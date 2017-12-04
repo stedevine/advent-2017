@@ -55,7 +55,6 @@ def getShell(inputValue):
 #12 57
 
 def getNeighborsIndices(inputIndex):
-    print(inputIndex)
     shell = getShell(inputIndex)
 
     lower = ((((shell-1)*2)-1)**2) + 1
@@ -116,6 +115,42 @@ def getNeighborsIndices(inputIndex):
     if (inputIndex == br):
         return [inputIndex-1, getInnerShellIndex(shell-1, 'br'),lower]
 
+    if (inputIndex > lower and inputIndex < tr - 1):
+        distanceToCorner = tr - inputIndex
+        l = (getInnerShellIndex(shell-1, 'tr') - (distanceToCorner-2)-2)
+        if (l  < getInnerShellIndex(shell-1, 'lower')):
+            l =  getInnerShellIndex(shell-1, 'upper')
+        return [
+    getInnerShellIndex(shell-1, 'tr') - (distanceToCorner-2),
+    getInnerShellIndex(shell-1, 'tr') - (distanceToCorner-2)-1,
+    l,
+    inputIndex-1]
+
+    if (inputIndex > tr + 1 and inputIndex < tl - 1):
+        distanceToCorner = tl - inputIndex
+        return [
+    getInnerShellIndex(shell-1, 'tl') - (distanceToCorner-2),
+    getInnerShellIndex(shell-1, 'tl') - (distanceToCorner-2)-1,
+    getInnerShellIndex(shell-1, 'tl') - (distanceToCorner-2)-2,
+    inputIndex-1]
+
+    if (inputIndex > tr + 1 and inputIndex < bl - 1):
+        distanceToCorner = bl - inputIndex
+        return [
+    getInnerShellIndex(shell-1, 'bl') - (distanceToCorner-2),
+    getInnerShellIndex(shell-1, 'bl') - (distanceToCorner-2)-1,
+    getInnerShellIndex(shell-1, 'bl') - (distanceToCorner-2)-2,
+    inputIndex-1]
+
+    if (inputIndex > bl + 1 and inputIndex <  br):
+        distanceToCorner = br - inputIndex
+        return [
+    getInnerShellIndex(shell-1, 'br') - (distanceToCorner-2),
+    getInnerShellIndex(shell-1, 'br') - (distanceToCorner-2)-1,
+    getInnerShellIndex(shell-1, 'br') - (distanceToCorner-2)-2,
+    inputIndex-1]
+
+
 
 
 def getInnerShellIndex(shell, corner):
@@ -132,9 +167,32 @@ def getInnerShellIndex(shell, corner):
         'tl' : tl,
         'bl' : bl,
         'br' : br,
-        'lower' :lower
+        'lower' :lower,
+        'upper' :upper
         }[corner]
     return result
+
+def getSpiralValue(spiral, index):
+    value = 0
+    for i in getNeighborsIndices(index):
+        value += spiral[i]
+
+    return value
+
+
+def buildSpiral():
+    # Bootstrap the spiral with some values from the puzzle
+    # avoids having to deal with even more special cases for low numbers
+    spiral = [0,1,1,2,4,5,10,11,23,25]
+    i = 10
+    while (True):
+        value = getSpiralValue(spiral,i)
+        spiral.append(value)
+        if (value > 368078):
+            break
+        i = i +1
+
+    print spiral
 
 class Test(unittest.TestCase):
     def test(self):
@@ -148,6 +206,8 @@ class Test(unittest.TestCase):
         self.assertEqual(getDistanceToCenter(1024),31)
         self.assertEqual(getDistanceToCenter(1),0)
 
+
+"""
 print(getNeighborsIndices(12))
 print(getNeighborsIndices(13))
 print(getNeighborsIndices(14))
@@ -160,10 +220,15 @@ print(getNeighborsIndices(22))
 print(getNeighborsIndices(24))
 print(getNeighborsIndices(25))
 print(getNeighborsIndices(10))
+print(getNeighborsIndices(11))
 
+print(getNeighborsIndices(40))
+print(getNeighborsIndices(33))
+print(getNeighborsIndices(46))
+
+print(getNeighborsIndices(27))
+print(getNeighborsIndices(28))
+"""
 
 print(getDistanceToCenter(368078))
-#print(getInnerShellIndex(2,'tl'))
-#print(getInnerShellIndex(2,'tr'))
-#print(getInnerShellIndex(2,'bl'))
-#print(getInnerShellIndex(2,'br'))
+buildSpiral()
