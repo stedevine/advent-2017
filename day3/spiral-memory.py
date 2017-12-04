@@ -55,6 +55,7 @@ def getShell(inputValue):
 #12 57
 
 def getNeighborsIndices(inputIndex):
+    print(inputIndex)
     shell = getShell(inputIndex)
 
     lower = ((((shell-1)*2)-1)**2) + 1
@@ -63,40 +64,57 @@ def getNeighborsIndices(inputIndex):
     tl = tr + ((upper-lower)/4) + 1
     bl = tl + ((upper-lower)/4) + 1
     br = bl + ((upper-lower)/4) + 1
-    print "tl " + str(tl)
 
-    if (inputIndex == upper):
-        print "bottom right"
-
-    if (inputIndex == lower):
-        print "bottom right + one"
-
-
-    #if ((inputIndex > lower) and (lower < tr - 1)):
-    #    print ("right side")
-        # For shell > 2 Neighbors are previous + three values from right side of inner shell
-        # For shell == 2 Neighbours are previous + center
 
     if (inputIndex == tr - 1):
         #Neighbors are inner shell's top right, inner shell's topright - 1 and previous index
-      print ("top right - 1")
+        return [getInnerShellIndex(shell-1, 'tr'), getInnerShellIndex(shell-1, 'tr')-1, inputIndex-1]
 
     if (inputIndex == tr):
         #Neighbors are inner shells top right and previous index
         return [inputIndex-1, getInnerShellIndex(shell-1, 'tr')]
 
+    if (inputIndex == tr + 1):
+        #Neighbors are inner shell's top right, inner shell's topright + 1, previous index and prev prev index
+        return [getInnerShellIndex(shell-1, 'tr'), getInnerShellIndex(shell-1, 'tr')+1, inputIndex-1, inputIndex-2]
+
+    if (inputIndex == tl-1):
+        #Neighbors are inner shells top left, inner shell's top left -1 and previous index
+        return [getInnerShellIndex(shell-1, 'tl')-1, getInnerShellIndex(shell-1, 'tl'), inputIndex-1]
+
+
     if (inputIndex == tl):
         #Neighbors are inner shells top left and previous index
-        return [inputIndex-1, getInnerShellIndex(shell-1, 'tl')]
+        return [getInnerShellIndex(shell-1, 'tl'),inputIndex-1]
+
+    if (inputIndex == tl+1):
+        #Neighbors are inner shells top left, inner shell's top left +1, prev index and prev. prev index
+        return [getInnerShellIndex(shell-1, 'tl'), getInnerShellIndex(shell-1, 'tl')+1, inputIndex-2, inputIndex-1]
+
+
+    if (inputIndex == bl-1):
+        #Neighbors are inner shells bottom left, inner shell bottom left -1, and previous index
+        return [getInnerShellIndex(shell-1, 'bl'), getInnerShellIndex(shell-1, 'bl')-1, inputIndex-1]
 
     if (inputIndex == bl):
         #Neighbors are inner shells bottom left and previous index
-        return [inputIndex-1, getInnerShellIndex(shell-1, 'bl')]
+        return [getInnerShellIndex(shell-1, 'bl'), inputIndex-1]
+
+    if (inputIndex == bl+1):
+        #Neighbors are inner shells bottom left,inner shells bottom left+1, previous index and prev.previous index
+        return [getInnerShellIndex(shell-1, 'bl'), getInnerShellIndex(shell-1, 'bl')+1, inputIndex-2, inputIndex-1]
+
+    if (inputIndex == br-1):
+        #Neighbors are inner shells bottom right left,inner shells bottom right left-1 and previous index
+        # and this shell's lowest index
+        return [getInnerShellIndex(shell-1, 'br'),getInnerShellIndex(shell-1, 'br')-1, inputIndex-1, lower]
+
+    if (inputIndex == lower):
+        #Neighbors are previous index, innershell bottom right +1
+        return [inputIndex-1, getInnerShellIndex(shell-1, 'lower')]
 
     if (inputIndex == br):
-        #Neighbors are inner shells bottom right left and previous index
-        # and this shell's lowest index
-        return [lower, inputIndex-1, getInnerShellIndex(shell-1, 'br')]
+        return [inputIndex-1, getInnerShellIndex(shell-1, 'br'),lower]
 
 
 
@@ -113,7 +131,8 @@ def getInnerShellIndex(shell, corner):
         'tr' : tr,
         'tl' : tl,
         'bl' : bl,
-        'br' : br
+        'br' : br,
+        'lower' :lower
         }[corner]
     return result
 
@@ -129,14 +148,22 @@ class Test(unittest.TestCase):
         self.assertEqual(getDistanceToCenter(1024),31)
         self.assertEqual(getDistanceToCenter(1),0)
 
+print(getNeighborsIndices(12))
 print(getNeighborsIndices(13))
+print(getNeighborsIndices(14))
+print(getNeighborsIndices(16))
 print(getNeighborsIndices(17))
+print(getNeighborsIndices(18))
+print(getNeighborsIndices(20))
 print(getNeighborsIndices(21))
+print(getNeighborsIndices(22))
+print(getNeighborsIndices(24))
 print(getNeighborsIndices(25))
+print(getNeighborsIndices(10))
 
 
 print(getDistanceToCenter(368078))
-print(getInnerShellIndex(3,'tl'))
-print(getInnerShellIndex(3,'tr'))
-print(getInnerShellIndex(3,'bl'))
-print(getInnerShellIndex(3,'br'))
+#print(getInnerShellIndex(2,'tl'))
+#print(getInnerShellIndex(2,'tr'))
+#print(getInnerShellIndex(2,'bl'))
+#print(getInnerShellIndex(2,'br'))
