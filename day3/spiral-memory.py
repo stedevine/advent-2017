@@ -38,21 +38,6 @@ def getShell(inputValue):
         if inputValue <= tup[1]:
             return tup[0]
 
-# Part 2: Grid gets more interesting
-# Do we have to generate the grid?
-
-#1
-#2 1
-#3  2 (1 + (1))
-#4  4 (2 + (1 + 1))
-#5  5 (4 + 1)
-#6 10 (5 + (4 + 1))
-#7 11 (10 + 1)
-#8 23 (11 + (10 + 1))
-#9 25 (23 + (1 + 1))
-#10 26 (25 + (1))
-#11 54 (26 + (25 + 1)+2)
-#12 57
 
 def getNeighborsIndices(inputIndex):
     shell = getShell(inputIndex)
