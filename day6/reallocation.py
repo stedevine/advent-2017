@@ -22,16 +22,15 @@ def countReallocations(banks):
     sum = 0
     banksAsString = None
     allocations = Set()
-    while (banksAsString not in allocations):
+    while True:
         allocations.add(banksAsString)
         banks = reallocate(banks)
         banksAsString = banksToString(banks)
         sum += 1
+        if (banksAsString in allocations):
+            return sum
 
-    return sum
-
-
-# Keep reallocation until we see the same arrangement again
+# Part 2 : Keep reallocation until we see the same arrangement again
 # and return the size of the loop - the distance between the
 # duplicate allocations.
 # Part 1 is a subset of Part 2 - so we can return both values here.
