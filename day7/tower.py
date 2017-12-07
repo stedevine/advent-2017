@@ -107,6 +107,36 @@ print(getBottom(i))
 d = getDictionary(i)
 print(getTowerWeight(getBottom(i),d))
 
+# Start at the bottom
+# Measure the wieght of each of the sub trees
+# If the tree is unbalanced (one subtree is a different weight than the others)
+# Cost is difference between these values
+# If tree is balanced - we've gone too far - return previous diff.
+
+def getDiff(inputString):
+    diff = 0
+    dic = getDictionary(inputString)
+    bottom = getBottom(inputString)
+    while True:
+        print "checking : " + bottom
+        subTreeWeights = {}
+        for p in getSubTowerBases(bottom,dic):
+            subTreeWeights[p] = str(getTowerWeight(p, dic))
+
+        numberOfSubTrees = len(subTreeWeights)
+        # Is there a unique value in this dictionary?
+        c = Counter(subTreeWeights.itervalues())
+        if (numberOfSubTrees == c.most_common()[0][1]):
+            # we're done
+            return diff
+
+        diff = abs(int(c.most_common()[0][0]) - int(c.most_common()[-1][0]))
+        for t in subTreeWeights:
+            if (subTreeWeights[t] == c.most_common()[-1][0]):
+                bottom = t
+                break
+
+
 j = """pbga (66)
 xhth (57)
 ebii (61)
@@ -120,6 +150,11 @@ jptl (61)
 ugml (68) -> gyxo, ebii, jptl
 gyxo (61)
 cntj (57)"""
+print("diff :" + str(getDiff(j)))
+
+print("diff :" + str(getDiff(read_file("input.txt"))))
+
+"""
 dj = getDictionary(j)
 
 a={}
@@ -132,3 +167,4 @@ val_counter = Counter(a.itervalues())
 unbalanced = [k for k, v in a.iteritems() if val_counter[v] == 1][0]
 
 print unbalanced
+"""
