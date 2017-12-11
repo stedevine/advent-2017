@@ -14,9 +14,9 @@ def createRegisters(inputString):
 
     return registers
 
-
 def runInstructions(inputString):
     allTimeHighest = 0
+    currentHighest = 0
     registers = createRegisters(inputString)
     for line in iter(inputString.splitlines()):
         # line is [register] [increase or decrease] [value] if [register] [operator] [value]
@@ -27,7 +27,8 @@ def runInstructions(inputString):
         op = condition.split()[1]
         v = condition.split()[2]
 
-        if evaluateCondition(int(registers[r]), op, int(v)):
+        #eval (str(registers[r]) + " " +  op +  v)
+        if eval (str(registers[r]) + " " +  op +  v):
             # change the register
             action = line.split("if ")[0].split()
             if action[1] == 'inc':
@@ -57,9 +58,10 @@ def evaluateCondition(v1, op, v2):
 
 class Test(unittest.TestCase):
     def test(self):
-        self.assertEqual(runInstructions("""b inc 5 if a > 1
+        instructions = """b inc 5 if a > 1
 a inc 1 if b < 5
 c dec -10 if a >= 1
-c inc -20 if c == 10"""),1)
+c inc -20 if c == 10"""
+        self.assertEqual(runInstructions(instructions), (1,10))
 
 print(runInstructions(read_file("input.txt")))
