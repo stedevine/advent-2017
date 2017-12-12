@@ -4,7 +4,7 @@ def read_file(file_name):
     """Helper function, read file return contents as string"""
     file_handle = open(file_name, 'r')
     return file_handle.read().strip()
-
+    
 def getSum(inputString):
     sum = 0
     #if two consecutive characters match sum them
